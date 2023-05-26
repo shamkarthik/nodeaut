@@ -1,0 +1,45 @@
+import { configureStore, Middleware } from "@reduxjs/toolkit";
+import tollGateReducer from "./components/addTollGate/store/tollGateSlice";
+import tollEntryReducer from "./components/addTollEntries/store/tollEntrySlice";
+
+interface ApplicationState {
+  // Define the state shape of your reducers here
+  tollEntry: TollEntryState;
+  tollGate: TollGateState;
+  // Add more reducers if needed
+}
+
+interface TollEntryState {
+  // Define the state shape for tollEntryReducer here
+  // Example: property1: string;
+}
+
+interface TollGateState {
+  // Define the state shape for tollGateReducer here
+  // Example: property2: number;
+}
+
+const localStorageMiddleware: Middleware = ({ getState }) => {
+  return (next) => (action) => {
+    const result = next(action);
+    localStorage.setItem('applicationState', JSON.stringify(getState()));
+    return result;
+  };
+};
+
+const reHydrateStore = () => {
+  const storedState = localStorage.getItem('applicationState');
+  if (storedState !== null) {
+    return JSON.parse(storedState) as ApplicationState;
+  }
+};
+
+export default configureStore({
+  reducer: {
+    tollEntry: tollEntryReducer,
+    tollGate: tollGateReducer,
+  },
+  preloadedState: reHydrateStore(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware<ApplicationState>().concat(localStorageMiddleware),
+});
