@@ -1,0 +1,12 @@
+import React from 'react';
+import Icon from '@ant-design/icons';
+
+interface ReusableIconProps {
+  svgPath: string;
+}
+
+const ReusableIcon: React.FC<ReusableIconProps> = ({ svgPath }) => {
+  return <Icon component={() => <img src={process.env.PUBLIC_URL + svgPath} alt="Icon" />} />;
+};
+
+export default ReusableIcon;
