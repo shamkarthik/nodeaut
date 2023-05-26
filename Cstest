@@ -1,0 +1,37 @@
+
+.menu-container {
+  @apply space-y-2;
+}
+
+.menu-item-group {
+  @apply relative;
+}
+
+.menu-item {
+  @apply relative;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background-color: #001529;
+    border-radius: 0 20px 20px 0;
+    z-index: -1;
+  }
+
+  &:before {
+    left: -20px;
+  }
+
+  &:after {
+    right: -20px;
+  }
+}
+
+.menu-item-label {
+  @apply relative;
+  z-index: 1;
+}
