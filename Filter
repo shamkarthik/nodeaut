@@ -1,0 +1,37 @@
+import { useState, useMemo } from 'react';
+
+interface MyObject {
+  id: number;
+  // Other properties...
+}
+
+function checkAndModifyArray(arr: MyObject[], objectToAdd: MyObject): MyObject[] {
+  const index = arr.findIndex(obj => obj.id === objectToAdd.id);
+
+  if (index !== -1) {
+    // Object already exists, so remove it
+    return arr.filter(obj => obj.id !== objectToAdd.id);
+  } else {
+    // Object does not exist, so add it
+    return [...arr, objectToAdd];
+  }
+}
+
+// Example usage in a functional component
+function MyComponent() {
+  const [myArray, setMyArray] = useState<MyObject[]>([
+    { id: 1 },
+    { id: 2 },
+    { id: 3 }
+  ]);
+
+  const object1: MyObject = { id: 2 };
+  const modifiedArray1 = useMemo(() => checkAndModifyArray(myArray, object1), [myArray]);
+  setMyArray(modifiedArray1);
+
+  const object2: MyObject = { id: 4 };
+  const modifiedArray2 = useMemo(() => checkAndModifyArray(modifiedArray1, object2), [modifiedArray1]);
+  setMyArray(modifiedArray2);
+
+  // Rest of the component...
+}
