@@ -1,0 +1,44 @@
+import React from 'react';
+import { Drawer, Table } from 'antd';
+import { ColumnProps } from 'antd/lib/table';
+import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
+
+// Define an interface for the column configuration
+interface ColumnConfig extends ColumnProps<any> {
+  key: string;
+}
+
+interface TableColumnReorderProps {
+  columns: ColumnConfig[];
+  setColumns: React.Dispatch<React.SetStateAction<ColumnConfig[]>>;
+}
+
+const TableColumnReorder: React.FC<TableColumnReorderProps> = ({ columns, setColumns }) => {
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return; // dropped outside the list
+
+    const updatedColumns = [...columns];
+    const [removed] = updatedColumns.splice(result.source.index, 1);
+    updatedColumns.splice(result.destination.index, 0, removed);
+
+    setColumns(updatedColumns);
+  };
+
+  return (
+    <Drawer title="Column Reordering" visible={true}>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              <Table dataSource={dataSource} columns={columns} pagination={false} />
+
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </Drawer>
+  );
+};
+
+export default TableColumnReorder;
