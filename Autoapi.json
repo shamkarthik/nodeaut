@@ -1,0 +1,39 @@
+export const fields: DynamicFieldData[] = [
+  {
+    fieldName: "name",
+    inputType: "text",
+    label: "Name",
+    defaultValue: ""
+  },
+  {
+    fieldName: "age",
+    inputType: "number",
+    label: "Age",
+    defaultValue: 18
+  },
+  {
+    fieldName: "language",
+    inputType: "select",
+    label: "Language",
+    options: [
+      { value: 'english', label: 'English' },
+      { value: 'french', label: 'French' }
+    ],
+    defaultValue: "english",
+    config: {
+      watchField: "language", // Specify the name of the field to watch for changes
+      loadOptionsFromAPI: "languages", // Key instead of complete URL
+      setNextField: {
+        fieldName: "nextField",
+        fieldValue: "nextValue"
+      }
+    }
+  },
+  {
+    fieldName: "nextField",
+    inputType: "select",
+    label: "Next Field",
+    options: [], // Will be populated dynamically based on the API response
+    defaultValue: ""
+  }
+];
