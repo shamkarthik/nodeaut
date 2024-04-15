@@ -1,0 +1,19 @@
+function validateObject(obj, requiredKeys, checkForNullUndefined = true) {
+  const validationErrors = requiredKeys
+    .map(key => (!obj.hasOwnProperty(key) ? `Field: ${key} is missing` : null))  // Check for missing fields
+    .concat(
+      checkForNullUndefined
+        ? Object.keys(obj)
+            .map(key => (obj[key] === null || obj[key] === undefined ? `Field: ${key} has an invalid value (null or undefined)` : null))
+        : []
+    ) // Optional check for null/undefined (conditional with map)
+    .reduce((errors, error) => error ? errors.concat(error) : errors, []); // Concatenate only non-null error messages
+
+  if (validationErrors.length > 0) {
+    console.error("User understanding statement validation errors:\n", validationErrors.join("\n"));
+  }
+
+  return validationErrors.length === 0;
+}
+
+// Example usage (same as before)
